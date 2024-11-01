@@ -6,48 +6,30 @@
 
 <script src="/comunity/res/js/summernote-bs5.min.js"></script>
 <script src="/comunity/res/js/lang/summernote-ko-KR.js"></script> 
+<c:if test="${adminBbs.rgrade > member.grade }">
+  <script>
+   alert("권한이 없습니다.");
+   location.href="/comunity";
+  </script>  
+</c:if>
 <script>
-  $(function(){
+   $(function(){
 	 $("#content").summernote({
 		 lange: 'ko-KR',
 		 height: 350
-	 }); 
-	 $("#upfile").change(function(){
-		 const fileInput = $("#upfile")[0];
-		 const formData = new FormData();
-		 
-		 //파일 선택 확인
-		 if(fileInput.files.length > 0) {
-			formData.append('file', fileInput.files[0]);
-			$.ajax({
-				url: '/comunity/bbs/upload?${_csrf.parameterName}=${_csrf.token}',
-				type: 'POST',
-				data: formData,
-				enctype: 'multipart/form-data',
-				processData: false,
-				contentType: false,
-				success: function(res){
-					const fileurl = res.fileUrl;  //서버에서 보낼 것
-					const fileName = res.fileName; //서버에서 보낼 것
-					
-					$(".uploadinbox").append(
-					  `<div class="upload-file"><a href="${fileUrl}" target="_blank">${fileName}</div>`		
-					);
-					
-				},
-				error: function(){
-					alert("문제가 발생했습니다.");
-				}
-			})
-		 }else{
-			 alert("change론 안되지롱");
-		 }
-		 
 	 });
   });
 </script>
 <div class="p-5 m-5">
-<form class="row" action="/comunity/bbs/write" method="post">
+<c:choose>
+  <c:when test="${adminBbs.fgrade > 0}">
+     <form class="row" action="/comunity/bbs/writefile" method="post"  enctype="multipart/form-data">
+  </c:when>
+  <c:otherwise>
+     <form class="row" action="/comunity/bbs/write" method="post">
+  </c:otherwise> 
+</c:choose>  
+  <c:if test="${adminBbs.category > 0}">
     <label class="col-2 text-right py-3 my-3">
        카테고리
     </label>
@@ -58,6 +40,8 @@
           </c:forEach>
        </select>
     </div>
+   </c:if>
+    
     <label class="col-2 text-right  py-2 my-2">
        제목
     </label>
@@ -68,18 +52,14 @@
        <textarea name="content" id="content"></textarea>
     </div>
     
-    <!-- 파일업로드 -->
-    <div class="col-12 my-2 py-2">
-       <div class="uploadbox">
-          <div class="text-right">
-             <label for="upfile" class="btn btn-success" id="fileupload">파일업로드</label>
-             <input type="file" name="upfile" id="upfile" class="upfile" />
-          </div>
-          <div class="uploadinbox">
-          
-          </div>
-       </div>
-    </div>
+    <c:if test="${adminBbs.fgrade > 0}">
+    <label class="col-2 text-right py-2 my-2">
+        파일업로드
+    </label>
+    <div class="col-10  py-2 my-2">
+       <input type="file" class="form-control" name="file" id="file" />
+    </div>   
+    </c:if>
     
     <div class="col-12 text-center  py-2 my-2">
        <input type="hidden" name="bbsid" value="1" />
@@ -91,6 +71,5 @@
        <button type="reset" class="btn btn-danger me-3"> 취 소 </button>
        <button type="submit" class="btn btn-primary ms-3"> 전 송 </button>
     </div>
-    
 </form>
 </div>
