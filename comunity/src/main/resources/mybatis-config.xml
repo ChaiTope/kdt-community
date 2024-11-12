@@ -7,8 +7,8 @@
      <setting name="cacheEnabled" value="true" />
      <setting name="mapUnderscoreToCamelCase" value="true" />
      
-     <!-- MyBatis가 사용할 로깅 프레임워크 설정 
-     <setting name="logImpl" value="LOG4J" />-->
+     <!-- MyBatis가 사용할 로깅 프레임워크 설정 -->
+     <setting name="logImpl" value="LOG4J" />
   </settings>
   <!--  별칭등록 -->
   <typeAliases>
@@ -17,6 +17,7 @@
 	  <typeAlias alias="bbs" type="net.musecom.comunity.model.Bbs" />
 	  <typeAlias alias="member" type="net.musecom.comunity.model.Member" />
 	  <typeAlias alias="memberRole" type="net.musecom.comunity.model.MemberRole" />
+	  <typeAlias alias="fileDto" type="net.musecom.comunity.model.FileDto" />
   </typeAliases>
   
 </configuration>

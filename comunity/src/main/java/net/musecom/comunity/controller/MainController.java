@@ -18,6 +18,7 @@ import net.musecom.comunity.model.Member;
 import net.musecom.comunity.model.MemberRole;
 import net.musecom.comunity.service.ClientIpAddress;
 import net.musecom.comunity.service.FileUploadService;
+import net.musecom.comunity.service.InstargramParser;
 
 @Controller
 public class MainController {
@@ -131,4 +132,11 @@ public class MainController {
 	}
 	
 
+	@GetMapping("/insta")
+	public String instagram(@RequestParam("instaid") String instaid, Model model ) {
+		InstargramParser instgramParser = new InstargramParser();
+		model.addAttribute("insta", instgramParser.getStringText(instaid));
+		return "main.insta";
+	}
+	
 }
